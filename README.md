@@ -6,6 +6,7 @@
 | -------------- | ------------------------ |
 | 创建项目       | `nest new project-name`  |
 | 创建controller | `nest g controller test` |
+| 创建service | `nest g service test` |
 
 ## controller（控制器）
 
@@ -46,3 +47,38 @@ findAll() {
 ### 响应
 
  操作响应的方法是使用类库特有的响应对象(Response(`express 的 Response对象`))。为了注入特定的响应对象，我们需要使用 @Res() 装饰器。
+
+## 提供者(Providers)
+
+Nest的`Providers`包含一些基本的类，这些类都可以通过`constructor`注入依赖关系。
+`Providers`只是一个用`@Injectable()`装饰器注释的类。
+
+![providers 关系图](https://docs.nestjs.com/assets/Components_1.png)
+
+### 依赖注入
+
+解析依赖关系并将该依赖传递给控制器的构造函数。
+
+```TypeScript
+constructor(private readonly catsService: CatsService) {}
+```
+
+### 作用域
+
+Provider 通常具有与应用程序生命周期同步的生命周期（“作用域”）。在启动应用程序时，必须解析每个依赖项，因此必须实例化每个提供程序。同样，当应用程序关闭时，每个 provider 都将被销毁。
+
+### 可选提供者
+
+关联变为可选的， provider 不会因为缺少配置导致错误。
+要指示 provider 是可选的，在 constructor 的参数中使用 `@Optional()`装饰器。
+
+### 基于属性的注入
+
+> **❗如果您的类没有扩展其他提供者，你应该总是使用基于构造函数的注入。**
+
+
+可以在属性上使用 `@Inject()` 装饰器。
+
+## 注册提供者
+
+我们可以编辑模块文件（app.module.ts），然后将服务添加到@Module()装饰器的 providers 数组中。
